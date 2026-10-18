@@ -1,0 +1,47 @@
+"""
+Predict the handwritten character in an image.
+
+Usage:
+    python predict.py my_digit.png
+Works best with a single dark-on-light (or light-on-dark) character image.
+Run handwritten_recognition.py first to create handwritten_model.keras and classes.npy.
+"""
+import sys
+import numpy as np
+import tensorflow as tf
+from PIL import Image
+
+
+def preprocess(path):
+    arr = np.array(Image.open(path).convert("L"), dtype=np.float32)
+    if arr.mean() > 127:          # white background -> invert to match MNIST (white on black)
+        arr = 255 - arr
+    ys, xs = np.where(arr > 50)   # crop to the character
+    if len(xs):
+        arr = arr[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+    h, w = arr.shape
+    s = max(h, w)
+    square = np.zeros((s, s), dtype=np.float32)
+    square[(s - h) // 2:(s - h) // 2 + h, (s - w) // 2:(s - w) // 2 + w] = arr
+    small = np.array(Image.fromarray(square.astype("uint8")).resize((20, 20)), dtype=np.float32)
+    canvas = np.zeros((28, 28), dtype=np.float32)
+    canvas[4:24, 4:24] = small    # centre in 28x28 like MNIST
+    return canvas / 255.0
+
+
+def predict(path):
+    model = tf.keras.models.load_model("handwritten_model.keras")
+    classes = np.load("classes.npy")
+    x = preprocess(path)[None, ..., None]
+    probs = model.predict(x, verbose=0)[0]
+    print(f"\nFile: {path}")
+    print(f"Predicted character: {classes[int(np.argmax(probs))]}")
+    print("\nTop 3 predictions:")
+    for i in np.argsort(probs)[::-1][:3]:
+        print(f"  {classes[i]}  {probs[i] * 100:5.1f}%")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit("Usage: python predict.py image.png")
+    predict(sys.argv[1])
