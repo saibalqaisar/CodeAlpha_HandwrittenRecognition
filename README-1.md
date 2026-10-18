@@ -54,10 +54,15 @@ Top 3 predictions:
 ## Results
 | Metric | Value |
 |--------|-------|
-| Test Accuracy | (add your result) |
+| Test Accuracy | (0.99) |
 
-![Confusion Matrix](confusion_matrix.png)
-![Sample Predictions](sample_predictions.png)
+<img width="1920" height="1080" alt="Screenshot (65)" src="https://github.com/user-attachments/assets/f39f4f76-f082-4772-9ccb-44079b035680" />
+<img width="1920" height="1080" alt="Screenshot (64)" src="https://github.com/user-attachments/assets/ab45ea1b-cf61-4146-a04c-5c55282b82d0" />
+<img width="1920" height="1080" alt="Screenshot (63)" src="https://github.com/user-attachments/assets/dec65e32-38cb-4745-81a7-05b14ea8e31c" />
+
+
+
+
 
 ## Future Work
 Extend to full word/sentence recognition using CRNN (CNN + RNN + CTC loss).
@@ -66,4 +71,4 @@ Extend to full word/sentence recognition using CRNN (CNN + RNN + CTC loss).
 Python, TensorFlow/Keras, NumPy, scikit-learn, Matplotlib, Pillow
 
 ## Author
-Your Name - CodeAlpha ML Intern
+saibal qaisar- CodeAlpha ML Intern
